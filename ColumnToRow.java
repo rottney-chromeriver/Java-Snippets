@@ -1,52 +1,31 @@
 import java.util.*;
 
 /*
-    Formats a data feed to mimic JSON for readibility
-    Version 0.0.1:  assumes well-formatted input*
-        * a.k.a. no newline character at the end lol
-        no missing pipe characters, etc.
+    Transposes a column into a row
+    Removes quotation (") characters, if present
+	Prints comma (,) character in between elements
 */
 
-public class FormatFeed {
-    public static void ProcessInput(Vector<String> vect) {
-        Scanner scan = new Scanner(System.in);
-        while (scan.hasNextLine()) {
-            vect.add(scan.nextLine());
-        }
-        scan.close();
-    }
-    
-    public static int CountOccurrences(String str, char delim) {
-        int count = 0;
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == delim) {
-                count++;
-            }
-        }
-        return count + 1;
-    }
+public class ColumnToRow {
 
     public static void main(String []args) {
-        // Config
-        char delim = '|';
-        String token = "\\|";
-        
-        // Input
-        Vector<String> vect = new Vector<String>();
-        ProcessInput(vect);
+        // IO
+        Vector<String> vect = new Vector<String>(); 
+        Scanner scan = new Scanner(System.in);
+
+        while (scan.hasNextLine()) {
+            if (scan.nextLine().compareTo("") != 0) {
+                vect.add(scan.nextLine());
+            }
+        }
+        scan.close();
 
         // Logic
-        int numCols = CountOccurrences(vect.get(0), delim);
-        int numRows = vect.size() - 1;    // don't count header as row
-        String[] head = vect.get(0).split(token);
-        
-        for (int i = 0; i < numRows; i++) {
-            System.out.println("Record " + (i + 1) + ": {");
-            for (int j = 0; j < numCols; j++) {
-                System.out.print("\t" + head[j] + ":\t");
-                System.out.println(vect.get(i + 1).split(token)[j]);
+        for (int i = 0; i < vect.size(); i++) {
+            System.out.print(vect.get(i).replace("\"", ""));
+            if (i < vect.size() - 1) {
+                System.out.print(", ");
             }
-            System.out.println("}\n");
         }
     }
 }
